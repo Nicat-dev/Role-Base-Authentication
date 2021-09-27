@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<link rel="stylesheet" href="image/nicat.css">
+<head>
+<meta charset="ISO-8859-1">
+<title>Student Information</title>
+</head>
+<body>
+	<div align="center">
+		<h1>Univercity Vaccination List</h1>
+		<div class="extra-nicat" style="width: 300px; height: 400px; background-color: antiquewhite; border-radius: 40px; text-align: center; display: inline; float: left">
+				<img src="https://www.eguardtech.com/wp-content/uploads/2018/08/Network-Profile.png" width="300px" height="300px">
+		<div sec:authorize="isAuthenticated()">
+			username :  <b><span sec:authentication="name">Username</span></b> &nbsp;
+			<i><span sec:authentication="principal.authorities">Roles</span></i>
+		</div>
+
+		<form th:action="@{/logout}" method="post">
+			<input type="submit" value="Logout" class="btn btn-danger" />
+		</form>
+
+		<div sec:authorize="hasAnyAuthority('CREATOR', 'ADMIN')">
+		<a href="/new">Add Student</a>
+		</div>
+		</div>
+
+		<table class="table table-dark" style="width: 600px;">
+			<thead>
+				<tr>
+					<th scope="col">Student ID</th>
+					<th scope="col">Student Name</th>
+					<th scope="col">Student City</th>
+					<th scope="col" sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="student : ${listStudent}">
+					<td th:text="${student.sid}">Student ID</td>
+					<td th:text="${student.sname}">Student Name</td>
+					<td th:text="${student.scity}">Student City</td>
+
+					<td sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')" style="width: 100px">
+						<div sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">
+							<a th:href="@{'/edit/' + ${student.sid}}" style="display: inline;"><i class="fas fa-user-edit"></i></a>
+						</div> &nbsp;&nbsp;&nbsp;
+						<div sec:authorize="hasAnyAuthority('ADMIN')">
+							<a th:href="@{'/delete/' + ${student.sid}}" style="display: inline;"><i class="fas fa-trash-alt"></i></a>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+
+
+	<script src="https://kit.fontawesome.com/1dc8869e69.js" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+</body>
+</body>
+</html>
